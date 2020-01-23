@@ -1,5 +1,5 @@
 # akFillFromJSON
-Fill DOM objects with JSON data based on classes.
+Fill DOM objects with JSON data based on tag attributes.
 
 ## Fill HTML Template with JSON data
 Once you have your HTML template created and jQuery included:
