@@ -34,24 +34,44 @@ You can assign various class names to objects to insert values from JSON. In the
         ```
         <img src="#" class="myKeyVal" data-path="/assets/myImages/"\>
         ```
--   Objects with the class `[key]Div` will only be visible when the `[value]` is provided and is not blank.
--   Objects with the class `not-[key]Div` will only be visible when the `[value]` is either not provided or blank.
+-   Objects with the class `[key]Div` will only be visible when the `[value]` is not blank.
+-   Objects with the class `not-[key]Div` will only be visible when the `[value]` is blank.
 
-#### Example: 
+#### EXAMPLE 
 Show field values only when they have values.
 
-JSON Data:
-```
-{
-  firstName: "Ashley",
-  lastName: "Salinas"
-}
-```
 HTML Template:
 ```
-<div class="firstNameDiv">First Name: <span class="firstNameVal"></span></div>
-<div class="lastNameDiv">Last Name: <span class="lastNameVal"></span></div>
+<div id="myContainer">
+	<div class="firstNameDiv">First Name: <span class="firstNameVal"></span></div>
+	<div class="lastNameDiv">Last Name: <span class="lastNameVal"></span></div>
+	<div class="companyPhoneDiv">Company Phone: <span class="companyPhoneVal"></span></div>
+	<div class="not-companyPhoneDiv">
+		<div class="homePhoneDiv">Home Phone: <span class="homePhoneVal"></span></div>
+	</div>
+</div>
 ```
+Initialize:
+```
+$("#myContainer").akFillFromJSON({
+	firstName: "Ashley",
+	lastName: "Salinas",
+	companyPhone: "",
+	homePhone: "555-1212"
+})
+```
+Final Result:
+```
+<div id="myContainer">
+	<div class="firstNameDiv">First Name: <span class="firstNameVal">Ashley</span></div>
+	<div class="lastNameDiv">Last Name: <span class="lastNameVal">Salinas</span></div>
+	<div class="companyPhoneDiv d-none hidden">Company Phone: <span class="companyPhoneVal"></span></div>
+	<div class="not-companyPhoneDiv">
+		<div class="homePhoneDiv">Home Phone: <span class="homePhoneVal">555-1212</span></div>
+	</div>
+</div>
+```
+
 ### Value Conversions
 Sometimes you need to convert the value before displaying it. Add the additional classes below to convert the value before displaying.
 
@@ -62,22 +82,32 @@ Sometimes you need to convert the value before displaying it. Add the additional
 -   `.toHTML`: convert a string to html (replaces line breaks with `<br>`)
 -   `.toText`: converts HTML to text only
 
-#### Example: 
+#### EXAMPLE
 Convert a description with line breaks into HTML with `<br>` tags.
 
-JSON Data:
-```
-{
-  articleID: 12345,
-  articleName: "Once Upon a Time",
-  articleDesc: "Once upon a time there was a bored programmer.\nShe stayed up too late writing documentation."
-}
-```
 HTML Template:
 ```
-<h3 class="articleNameVal"></h3>
-<div class="articleDescVal toHTML"></div>
+<div id="articleHeader">
+	<h3 class="articleNameVal"></h3>
+	<div class="articleDescVal toHTML"></div>
+</div>
 ```
+Initialize:
+```
+$("#articleHeader").akFillFromJSON({
+	articleID: 12345,
+	articleName: "Once Upon a Time",
+	articleDesc: "Once upon a time there was a bored programmer.\nShe stayed up too late writing documentation."
+})
+```
+Final Result:
+```
+<div id="articleHeader">
+	<h3 class="articleNameVal">Once Upon a Time</h3>
+	<div class="articleDescVal toHTML">Once upon a time there was a bored programmer.<br>She stayed up too late writing documentation.</div>
+</div>
+```
+
 
 ### Additional Shortcuts
 Sometimes values represent things other than text. Here are some other shortcuts to populate your HTML.
@@ -109,56 +139,52 @@ You can also make a block of HTML repeat for every item in an array of json obje
 -   `.[key]-item`: assign to HTML block inside of the holder container (`.[key]Div` by default) that will be repeated for each item in the array.
 -   Add the `data-assign` attribute to the `.[key]Div` element to assign the `[value]` of the `[key]` to the `data-id` attribute on each item.
 
-#### Example:
+#### EXAMPLE
 Show a section of demos with various properties.
-
-JSON Data: 
-```
-{
-  "demoModules": [
-    {
-      "moduleTitle": "OpenManage Enterprise v3.2 Getting Started",
-      "moduleDescription": "Focuses on the basic features available in OpenManage Enterprise v3.2 to provide you with a good understanding of its capabilities."
-    }, {
-      "moduleTitle": "OpenManage Enterprise Home Portal",
-      "moduleDescription": "a high-level overview of the OpenManage Enterprise Home Portal."
-    }
-  ]
-}
-```
 
 HTML Template:
 ```
 <div class="demoModulesDiv">
-<h4>Lab Modules</h4>
-<ul class="fa-ul demoModules-holder">
-  <li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
-    <strong class="moduleTitleVal"></strong>
-    <span class="moduleDescriptionDiv"> - 
-      <span class="moduleDescriptionVal"></span>
-    </span>
-  </li>
-</ul>
+	<h4>Lab Modules</h4>
+	<ul class="fa-ul demoModules-holder">
+		<li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
+			<strong class="moduleTitleVal"></strong>
+			<span class="moduleDescriptionDiv"> - 
+				<span class="moduleDescriptionVal"></span>
+			</span>
+		</li>
+	</ul>
 </div>
 ```
-
+Initialize:
+```
+$("body").akFillFromJSON({
+	"demoModules": [{
+		"moduleTitle": "OpenManage Enterprise v3.2 Getting Started",
+		"moduleDescription": "Focuses on the basic features available in OpenManage Enterprise v3.2 to provide you with a good understanding of its capabilities."
+	},{
+		"moduleTitle": "OpenManage Enterprise Home Portal",
+		"moduleDescription": "a high-level overview of the OpenManage Enterprise Home Portal."
+	}]
+})
+```
 Final Result:
 ```
 <div class="demoModulesDiv">
-<h4>Lab Modules</h4>
-<ul class="fa-ul demoModules-holder">
-  <li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
-    <strong class="moduleTitleVal">OpenManage Enterprise v3.2 Getting Started</strong>
-    <span class="moduleDescriptionDiv"> - 
-      <span class="moduleDescriptionVal">Focuses on the basic features available in OpenManage Enterprise v3.2 to provide you with a good understanding of its capabilities.</span>
-    </span>
-  </li>
-  <li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
-    <strong class="moduleTitleVal">OpenManage Enterprise Home Portal</strong>
-    <span class="moduleDescriptionDiv"> - 
-      <span class="moduleDescriptionVal">a high-level overview of the OpenManage Enterprise Home Portal.</span>
-    </span>
-  </li>
-</ul>
+	<h4>Lab Modules</h4>
+	<ul class="fa-ul demoModules-holder">
+		<li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
+			<strong class="moduleTitleVal">OpenManage Enterprise v3.2 Getting Started</strong>
+			<span class="moduleDescriptionDiv"> - 
+				<span class="moduleDescriptionVal">Focuses on the basic features available in OpenManage Enterprise v3.2 to provide you with a good understanding of its capabilities.</span>
+			</span>
+		</li>
+		<li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
+			<strong class="moduleTitleVal">OpenManage Enterprise Home Portal</strong>
+			<span class="moduleDescriptionDiv"> - 
+				<span class="moduleDescriptionVal">a high-level overview of the OpenManage Enterprise Home Portal.</span>
+			</span>
+		</li>
+	</ul>
 </div>
 ```
