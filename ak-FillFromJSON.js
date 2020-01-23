@@ -1,4 +1,4 @@
-/*! akFillFromJSON v1.0.1 2020-01-23 | https://github.com/akwebapps/akFillFromJSON | (c) 2020 AK Web Apps | Licensed MIT */
+/*! akFillFromJSON v1.0.1 2020-01-23 | https://github.com/akwebapps/ak-FillFromJSON | (c) 2020 AK Web Apps | Licensed MIT */
 (function ( $ ) {
 	$.fn.akFillFromJSON = function(data, notBS) {
 		this.each(function() {

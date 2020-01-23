@@ -3,12 +3,12 @@ Fill DOM objects with JSON data based on tag attributes.
 
 ## Fill HTML Template with JSON data
 Once you have your HTML template created and jQuery included:
-```$(element).akFillFromJSON(jsonData,notBS)```
+`$(element).akFillFromJSON(jsonData,notBS)`
 -	`element` (obj): DOM object you want to fill
 -	`jsonData` (obj): JSON object with key:value pairs to be used to fill the DOM object
 -	`notBS` (boolean): (optional) "Not Bootstrap". By default elements are shown/hidden using bootstrap classes `.d-none` and `.hidden`. If this is `false` then jQuery's `.show()` and `.hide()` will be used instead.
 
-```
+```javascript
 $("#myContainer").akFillFromJSON({
   firstName: "Ashley",
   lastName: "Salinas",
@@ -31,7 +31,7 @@ You can assign various class names to objects to insert values from JSON. In the
 -   Objext with class `[key]Val` will be populated with the `value`.
     -   If the object is an `<img>` or `<iframe>` tag then the value will be assigned to the `src`.
     -   Include `data-path` to the object if you'd like to APPEND the value to a fixed path.
-        ```
+        ```HTML
         <img src="#" class="myKeyVal" data-path="/assets/myImages/"\>
         ```
 -   Objects with the class `[key]Div` will only be visible when the `[value]` is not blank.
@@ -41,7 +41,7 @@ You can assign various class names to objects to insert values from JSON. In the
 Show field values only when they have values.
 
 HTML Template:
-```
+```HTML
 <div id="myContainer">
 	<div class="firstNameDiv">First Name: <span class="firstNameVal"></span></div>
 	<div class="lastNameDiv">Last Name: <span class="lastNameVal"></span></div>
@@ -52,7 +52,7 @@ HTML Template:
 </div>
 ```
 Initialize:
-```
+```javascript
 $("#myContainer").akFillFromJSON({
 	firstName: "Ashley",
 	lastName: "Salinas",
@@ -61,7 +61,7 @@ $("#myContainer").akFillFromJSON({
 })
 ```
 Final Result:
-```
+```HTML
 <div id="myContainer">
 	<div class="firstNameDiv">First Name: <span class="firstNameVal">Ashley</span></div>
 	<div class="lastNameDiv">Last Name: <span class="lastNameVal">Salinas</span></div>
@@ -86,14 +86,14 @@ Sometimes you need to convert the value before displaying it. Add the additional
 Convert a description with line breaks into HTML with `<br>` tags.
 
 HTML Template:
-```
+```HTML
 <div id="articleHeader">
 	<h3 class="articleNameVal"></h3>
 	<div class="articleDescVal toHTML"></div>
 </div>
 ```
 Initialize:
-```
+```javascript
 $("#articleHeader").akFillFromJSON({
 	articleID: 12345,
 	articleName: "Once Upon a Time",
@@ -101,7 +101,7 @@ $("#articleHeader").akFillFromJSON({
 })
 ```
 Final Result:
-```
+```HTML
 <div id="articleHeader">
 	<h3 class="articleNameVal">Once Upon a Time</h3>
 	<div class="articleDescVal toHTML">Once upon a time there was a bored programmer.<br>She stayed up too late writing documentation.</div>
@@ -143,7 +143,7 @@ You can also make a block of HTML repeat for every item in an array of json obje
 Show a section of demos with various properties.
 
 HTML Template:
-```
+```HTML
 <div class="demoModulesDiv">
 	<h4>Lab Modules</h4>
 	<ul class="fa-ul demoModules-holder">
@@ -157,7 +157,7 @@ HTML Template:
 </div>
 ```
 Initialize:
-```
+```javascript
 $("body").akFillFromJSON({
 	"demoModules": [{
 		"moduleTitle": "OpenManage Enterprise v3.2 Getting Started",
@@ -169,7 +169,7 @@ $("body").akFillFromJSON({
 })
 ```
 Final Result:
-```
+```HTML
 <div class="demoModulesDiv">
 	<h4>Lab Modules</h4>
 	<ul class="fa-ul demoModules-holder">
