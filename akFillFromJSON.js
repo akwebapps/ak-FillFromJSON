@@ -8,7 +8,7 @@
 	};
 	$.akFillFromJSON = function( elem, data, notBS ){
 		$.each(data,function(fieldName,fieldValue){
-			if(Array.isArray(fieldValue) && fieldValue.length && typeof fieldValue[0]!="object") fieldValue=fieldValue.join(joinBy || ", ");
+			if(Array.isArray(fieldValue) && fieldValue.length && typeof fieldValue[0]!="object") fieldValue=fieldValue.join(", ");
 			if(typeof fieldValue=="string" || typeof fieldValue=="number"){
 				// ----- .[fieldName]Val
 				$("."+fieldName+"Val:not(img):not(iframe), [data-param='"+fieldName+"']:not(img):not(iframe)",elem).each(function(){
