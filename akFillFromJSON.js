@@ -1,12 +1,17 @@
 /*! akFillFromJSON v1.0.1 2020-01-23 | https://github.com/akwebapps/ak-FillFromJSON | (c) 2020 AK Web Apps | @license Licensed MIT */
 (function ( $ ) {
-	$.fn.akFillFromJSON = function(data, notBS) {
+	$.fn.akFillFromJSON = function(data,params) {
 		this.each(function() {
-			new $.akFillFromJSON(this, data, notBS);
+			new $.akFillFromJSON(this,data,params);
 		});
 		return;
 	};
-	$.akFillFromJSON = function( elem, data, notBS ){
+	$.akFillFromJSON = function( elem, useData, params ){
+		var data=useData;
+		if(params.primaryKeyName) {
+			data={};
+			data[primaryKeyName] = useData;
+		}
 		$.each(data,function(fieldName,fieldValue){
 			if(Array.isArray(fieldValue) && fieldValue.length && typeof fieldValue[0]!="object") fieldValue=fieldValue.join(", ");
 			if(typeof fieldValue=="string" || typeof fieldValue=="number"){
@@ -44,30 +49,31 @@
 				$("."+fieldName+"Div",elem).each(function(){
 					var $hold=($("."+fieldName+"-holder",this).length)? $("."+fieldName+"-holder",this) : $(this), 
 						$item=$($("."+fieldName+"-item",this).first().outerHTML()),
-						idField=$(this).attr("data-assign") || "";
+						idField=$(this).attr("data-assign-id") || $(this).attr("data-assign") || "";
 					$("."+fieldName+"-item",this).remove();
 					$(fieldValue).each(function(i,obj){
 						$item.akFillFromJSON(obj);
 						if(idField) $item.attr("data-id",obj[idField]);
 						$hold.append($item.outerHTML());
+						if(params && typeof params.callback=="function") params.callback(fieldName,obj,$item);
 					})
 				})
 			}
 			if(fieldValue!="") {
-				if(notBS){
-					$(".not-"+fieldName+"Div",elem).hide();
-					$("."+fieldName+"Div",elem).show();
-				} else {
+				if(!params || params.boostrap){
 					$(".not-"+fieldName+"Div",elem).addClass("d-none hidden");
 					$("."+fieldName+"Div",elem).removeClass("d-none hidden");
+				} else {
+					$(".not-"+fieldName+"Div",elem).hide();
+					$("."+fieldName+"Div",elem).show();
 				}
 			}else{
-				if(notBS){
-					$(".not-"+fieldName+"Div",elem).show();
-					$("."+fieldName+"Div",elem).hide();
-				} else {
+				if(!params || params.boostrap){
 					$(".not-"+fieldName+"Div",elem).removeClass("d-none hidden");
 					$("."+fieldName+"Div",elem).addClass("d-none hidden");
+				} else {
+					$(".not-"+fieldName+"Div",elem).show();
+					$("."+fieldName+"Div",elem).hide();
 				}
 			}
 		})

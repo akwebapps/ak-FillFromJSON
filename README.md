@@ -3,11 +3,25 @@ Fill DOM objects with JSON data based on tag attributes.
 
 ## Fill HTML Template with JSON data
 Once you have your HTML template created and jQuery included:
-`$(element).akFillFromJSON(jsonData,notBS)`
+`$(element).akFillFromJSON(jsonData,params)`
 -	`element` (obj): DOM object you want to fill
 -	`jsonData` (obj): JSON object with key:value pairs to be used to fill the DOM object
--	`notBS` (boolean): (optional) "Not Bootstrap". By default elements are shown/hidden using bootstrap classes `.d-none` and `.hidden`. If this is `false` then jQuery's `.show()` and `.hide()` will be used instead.
+-	`params` (obj): optional parameters (see below)
 
+```json
+{
+  primaryKeyName: null, //assigns jsonData to a single key
+	//example primaryKey="myFieldName" would convert jsonData to { "myFieldName": jsonData };
+  bootstrap: true,
+	//By default elements are shown/hidden using bootstrap classes `.d-none` and `.hidden`.
+	//If this is `false` then jQuery's `.show()` and `.hide()` will be used instead.
+  callback: function(fieldName, data, $item){
+	//function run after $item has been appended to the [key]Div or [key]-holder element
+  }
+}
+```
+
+#### EXAMPLE USAGE
 ```javascript
 $("#myContainer").akFillFromJSON({
   firstName: "Ashley",
@@ -21,6 +35,12 @@ $("#myContainer").akFillFromJSON({
       city: "Dallas",
       state: "TX"
   }]
+},{
+	bootstrap: true,
+	primaryKeyName: "contactInfo",
+	callback: function(fieldName, data, $item){
+		if(fieldName=="addresses") $(".addressCount").text(data.length);
+	}
 })
 ```
 
@@ -137,7 +157,7 @@ You can also make a block of HTML repeat for every item in an array of json obje
 -   `.[key]Div`: top-level HTML parent block. By default, contents will be replaced with repeating HTML block.
 -   `.[key]-holder`: assign to HTML block inside of `.[key]Div` if you want to specify a sub-element as the container for the repeating HTML.
 -   `.[key]-item`: assign to HTML block inside of the holder container (`.[key]Div` by default) that will be repeated for each item in the array.
--   Add the `data-assign` attribute to the `.[key]Div` element to assign the `[value]` of the `[key]` to the `data-id` attribute on each item.
+-   Add the `data-assign-id` attribute to the `.[key]Div` or `.[key]-holder`elements to assign the `[value]` of the `[key]` to the `data-id` attribute on each item.
 
 #### EXAMPLE
 Show a section of demos with various properties.
@@ -146,7 +166,7 @@ HTML Template:
 ```HTML
 <div class="demoModulesDiv">
 	<h4>Lab Modules</h4>
-	<ul class="fa-ul demoModules-holder">
+	<ul class="fa-ul demoModules-holder" data-assign-id="moduleID">
 		<li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
 			<strong class="moduleTitleVal"></strong>
 			<span class="moduleDescriptionDiv"> - 
@@ -160,9 +180,11 @@ Initialize:
 ```javascript
 $("body").akFillFromJSON({
 	"demoModules": [{
+		"moduleID": 1,
 		"moduleTitle": "OpenManage Enterprise v3.2 Getting Started",
 		"moduleDescription": "Focuses on the basic features available in OpenManage Enterprise v3.2 to provide you with a good understanding of its capabilities."
 	},{
+		"moduleID": 2,
 		"moduleTitle": "OpenManage Enterprise Home Portal",
 		"moduleDescription": "a high-level overview of the OpenManage Enterprise Home Portal."
 	}]
@@ -173,13 +195,13 @@ Final Result:
 <div class="demoModulesDiv">
 	<h4>Lab Modules</h4>
 	<ul class="fa-ul demoModules-holder">
-		<li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
+		<li class="demoModules-item" data-id="1"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
 			<strong class="moduleTitleVal">OpenManage Enterprise v3.2 Getting Started</strong>
 			<span class="moduleDescriptionDiv"> - 
 				<span class="moduleDescriptionVal">Focuses on the basic features available in OpenManage Enterprise v3.2 to provide you with a good understanding of its capabilities.</span>
 			</span>
 		</li>
-		<li class="demoModules-item"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
+		<li class="demoModules-item" data-id="2"><span class="fa-li"><i class="far fa-caret-right"></i></span> 
 			<strong class="moduleTitleVal">OpenManage Enterprise Home Portal</strong>
 			<span class="moduleDescriptionDiv"> - 
 				<span class="moduleDescriptionVal">a high-level overview of the OpenManage Enterprise Home Portal.</span>
