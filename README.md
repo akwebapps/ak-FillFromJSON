@@ -211,3 +211,9 @@ Final Result:
 	</ul>
 </div>
 ```
+ #### GET DATA FOR ITEM
+ You can get the data for any item using HTML data attributes `.[key]-item.data("data")`;
+ ```javascript
+const record1Data = $(".demoModules-item[data-id='1']").data("data");
+console.log("Record 1 title = " + record1Data.moduleTitle);
+```
