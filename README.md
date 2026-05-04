@@ -8,7 +8,7 @@ Once you have your HTML template created and jQuery included:
 -	`jsonData` (obj): JSON object with key:value pairs to be used to fill the DOM object
 -	`params` (obj): optional parameters (see below)
 
-```json
+```javascript
 {
   primaryKeyName: null, //assigns jsonData to a single key
 	//example primaryKey="myFieldName" would convert jsonData to { "myFieldName": jsonData };
