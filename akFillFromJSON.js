@@ -64,7 +64,8 @@
 						$(fieldValue).each(function(i,obj){
 							var $item=$($hold.data("copy-elem")).children(":first").clone();
 							$item.akFillFromJSON(obj);
-							if(idField) $item.attr("data-id",obj[idField]);
+							if(idField) $item.data("id",obj[idField]).attr("data-id",obj[idField]);
+							$item.data("data",obj);
 							$hold.append($item);
 							if(params && typeof params.callback=="function") params.callback(fieldName,obj,$item);
 						})
