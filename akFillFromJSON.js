@@ -8,9 +8,9 @@
 	};
 	$.akFillFromJSON = function( elem, useData, params ){
 		var data=useData;
-		if(params.primaryKeyName) {
+		if(params && params.primaryKey) {
 			data={};
-			data[primaryKeyName] = useData;
+			data[params.primaryKey] = useData;
 		}
 		$.each(data,function(fieldName,fieldValue){
 			if(Array.isArray(fieldValue) && fieldValue.length && typeof fieldValue[0]!="object") fieldValue=fieldValue.join(", ");
@@ -45,18 +45,29 @@
 				$("."+fieldName+"Val-inpN",elem).attr("name",fieldValue).addClass(fieldValue);
 				$("."+fieldName+"Val-attr",elem).attr("data-"+ fieldName,fieldValue);
 			// ----- array of objects
-			} else if (typeof fieldValue=="object" && Array.isArray(fieldValue) && fieldValue.length && typeof fieldValue[0]=="object" && $("."+fieldName+"Div",elem).length && $("."+fieldName+"-item",elem).length){
+			} else if (typeof fieldValue=="object" && Array.isArray(fieldValue) && fieldValue.length && typeof fieldValue[0]=="object" && $("."+fieldName+"Div",elem).length){
 				$("."+fieldName+"Div",elem).each(function(){
-					var $hold=($("."+fieldName+"-holder",this).length)? $("."+fieldName+"-holder",this) : $(this), 
-						$item=$($("."+fieldName+"-item",this).first().outerHTML()),
-						idField=$(this).attr("data-assign-id") || $(this).attr("data-assign") || "";
-					$("."+fieldName+"-item",this).remove();
-					$(fieldValue).each(function(i,obj){
-						$item.akFillFromJSON(obj);
-						if(idField) $item.attr("data-id",obj[idField]);
-						$hold.append($item.outerHTML());
-						if(params && typeof params.callback=="function") params.callback(fieldName,obj,$item);
-					})
+					var $hold=($("."+fieldName+"-holder",this).length)? $("."+fieldName+"-holder",this) : $(this),
+						idField=$hold.attr("data-assign-id") || $hold.attr("data-assign") || "";
+					if(!$hold.data("copy-elem") && $("."+fieldName+"-item",$hold).length) {
+						var newID = fieldName;
+    					var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    					for( var i=0; i < 8; i++ ) newID += possible.charAt(Math.floor(Math.random() * possible.length));
+						$copyItem = $("."+fieldName+"-item",$hold).first().detach();
+						$("body").append("<div style='display:none' id='"+ newID +"'></div>");
+						$hold.data("copy-elem","#"+newID);
+						$("#"+newID).append($copyItem);
+					}
+					if($hold.data("copy-elem")){
+						var $item=$($hold.data("copy-elem")).children(":first").clone();
+						$("."+fieldName+"-item",$hold).remove();
+						$(fieldValue).each(function(i,obj){
+							$item.akFillFromJSON(obj);
+							if(idField) $item.attr("data-id",obj[idField]);
+							$hold.append($item);
+							if(params && typeof params.callback=="function") params.callback(fieldName,obj,$item);
+						})
+					}
 				})
 			}
 			if(fieldValue!="") {
