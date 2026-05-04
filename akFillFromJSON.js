@@ -54,14 +54,15 @@
     					var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     					for( var i=0; i < 8; i++ ) newID += possible.charAt(Math.floor(Math.random() * possible.length));
 						$copyItem = $("."+fieldName+"-item",$hold).first().detach();
-						$("body").append("<div style='display:none' id='"+ newID +"'></div>");
+						const useTag = $copyItem.is("tr") ? "table" : ($copyItem.is("li") ? "ol" : "div");
+						$("body").append("<"+ useTag +" style='display:none' id='"+ newID +"'></"+ useTag +">");
 						$hold.data("copy-elem","#"+newID);
 						$("#"+newID).append($copyItem);
 					}
 					if($hold.data("copy-elem")){
-						var $item=$($hold.data("copy-elem")).children(":first").clone();
 						$("."+fieldName+"-item",$hold).remove();
 						$(fieldValue).each(function(i,obj){
+							var $item=$($hold.data("copy-elem")).children(":first").clone();
 							$item.akFillFromJSON(obj);
 							if(idField) $item.attr("data-id",obj[idField]);
 							$hold.append($item);
