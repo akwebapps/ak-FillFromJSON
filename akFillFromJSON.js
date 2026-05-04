@@ -73,7 +73,7 @@
 				})
 			}
 			if(fieldValue!="") {
-				if(!params || params.boostrap){
+				if(!params || params.bootstrap){
 					$(".not-"+fieldName+"Div",elem).addClass("d-none hidden");
 					$("."+fieldName+"Div",elem).removeClass("d-none hidden");
 				} else {
@@ -81,7 +81,7 @@
 					$("."+fieldName+"Div",elem).show();
 				}
 			}else{
-				if(!params || params.boostrap){
+				if(!params || params.bootstrap){
 					$(".not-"+fieldName+"Div",elem).removeClass("d-none hidden");
 					$("."+fieldName+"Div",elem).addClass("d-none hidden");
 				} else {
