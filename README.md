@@ -394,7 +394,7 @@ Converts an email address into a `mailto` `<a>` element.
 
 ## Date Formatting
 
-The `[field]Val` `[data-format]` functionality converts a value to a Moment.js date and formats it using Moment.js.
+The `[field]Val` `[data-format]` functionality converts a value to a formated date.
 
 Example:
 
@@ -413,7 +413,6 @@ Example formats:
 | `L` | `09/04/1986` |
 | `LL` | `September 4, 1986` |
 
-This functionality requires Moment.js.
 
 ## Arrays of Objects
 
@@ -693,11 +692,10 @@ myObj.fillMore();
 | `[field]Val.toColorBlock` | Render a color block |
 | `[field]Val.toFAicon` | Render Font Awesome icon |
 | `[field]Val.toEmailLink` | Render email as a link |
-| `[field]Val[data-format]` | Format dates with Moment.js |
+| `[field]Val[data-format]` | Format dates |
 
 ## Notes
 
 - The plugin is designed around jQuery selectors and class-based field binding.
 - Array-of-object rendering supports templates, callbacks, placeholders, lazy loading, and incremental loading.
-- Date formatting depends on Moment.js.
 - Font Awesome formatting depends on the corresponding Font Awesome classes being available in the project.

@@ -65,7 +65,7 @@ CLASSES-------------------------------------------------------------------------
 	.[field]Val.toColorBlock: sets html to a block of color
 	.[field]Val.toFAicon: sets html to <i class='[value]'></i> and adds necessary fa and fa- to value
 	.[field]Val.toEmailLink: turns email string into a mailto <a></a> tag
-	.[field]Val[data-format]: converts value to a moment and formats it using moment.js. 
+	.[field]Val[data-format]: converts value to proper formats 
 		ex: class="[field]Val" date-format="I" gives 9/4/1986
 		L - 09/04/1986
 		LL - September 4, 1986
@@ -386,11 +386,12 @@ if(typeof akPluginArr=="undefined") akPluginArr={};
 					$("."+fieldName+"Val.toFAicon",holder).html("<i class='"+ iconPre + fieldValue +" fa-lg'></i>");
 				}
 				$("."+fieldName+"Val.toEmailLink",holder).html("<a href='mailto:"+ fieldValue +"'>"+ fieldValue +"</a>");
-				if($("."+fieldName+"Val[data-format]:not([data-format=''])",holder).length && moment(fieldValue).isValid()){
-					 $("."+fieldName+"Val[data-format]:not([data-format='']",holder).each(function(){
-					 	var thisFormat=$(this).attr("data-format"), thisDate=moment(fieldValue).format(thisFormat);
+				if ($("." + fieldName + "Val[data-format]:not([data-format=''])", holder).length) {
+					$("." + fieldName + "Val[data-format]:not([data-format=''])", holder).each(function() {
+						var thisFormat = $(this).attr("data-format");
+						var thisDate = formatDate(fieldValue).format(thisFormat);
 						$(this).text(thisDate);
-					 })
+					});
 				}
 			}
 			if($("img."+fieldName+"Val.fillBox").length) $("img."+fieldName+"Val.fillBox").fillBox();
@@ -500,6 +501,35 @@ if(typeof akPluginArr=="undefined") akPluginArr={};
 				catch (e) {}
 			}
 			return r;
+		},
+		formatDate = function(value, format) {
+			const date = new Date(value);
+
+			if (Number.isNaN(date.getTime())) {
+				return value;
+			}
+
+			switch (format) {
+				case "I":
+					return new Intl.DateTimeFormat("en-US").format(date);
+
+				case "L":
+					return new Intl.DateTimeFormat("en-US", {
+						month: "2-digit",
+						day: "2-digit",
+						year: "numeric"
+					}).format(date);
+
+				case "LL":
+					return new Intl.DateTimeFormat("en-US", {
+						month: "long",
+						day: "numeric",
+						year: "numeric"
+					}).format(date);
+
+				default:
+					return new Intl.DateTimeFormat("en-US").format(date);
+			}
 		},
 		Log = function (msgOrObj,ow) {
 			if (typeof showLog=="undefined" || showLog|| ow==true){
